@@ -191,9 +191,9 @@ var tabsManager = {
                         var scope_pat = new RegExp("ideas/(.*)", 'g');
                         var ret = scope_pat.exec( $(el).attr('href') );
                         if ( ret[1] == that.activeTab ) {
-                            $(el).parent().addClass('active first');
+                            $(el).parent().addClass('active');
                         } else {
-                            $(el).parent().removeClass('active first');
+                            $(el).parent().removeClass('active');
                         }
                     } );
                 }
