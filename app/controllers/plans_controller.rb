@@ -14,10 +14,8 @@ class PlansController < ApplicationController
     respond_to do |format|
       if @plan.save
         format.html { redirect_to my_plan_path, :notice => 'plan is successfully uploaded.' }
-        format.json { render :json => @idea, :status => :created, :location => @idea }
       else
         format.html { redirect_to my_plan_path, :notice => 'plan was unsuccessfully uploaded.' }
-        format.json { render :json => @idea.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -36,10 +34,8 @@ class PlansController < ApplicationController
     respond_to do |format|
       if ret
         format.html { redirect_to my_plan_path, :notice => 'plan is successfully updated.' }
-        format.json { render :json => @idea, :status => :created, :location => @idea }
       else
         format.html { redirect_to my_plan_path, :notice => 'plan was unsuccessfully updated.' }
-        format.json { render :json => @idea.errors, :status => :unprocessable_entity }
       end
     end
   end
