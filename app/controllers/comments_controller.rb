@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  before_filter :authenticate_user!
   before_filter :authorized_user, :only => :destroy
   
   # GET /comments
