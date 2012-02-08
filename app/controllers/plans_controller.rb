@@ -1,5 +1,4 @@
 class PlansController < ApplicationController
-  before_filter :authenticate_user!
 
   def index
     my_plan_path = ideas_path + "?scope=upload"

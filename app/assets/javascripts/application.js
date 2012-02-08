@@ -18,7 +18,6 @@ function for_faye(){
         server = '127.0.0.1';
     }
     var client = new Faye.Client('http://'+server+':9292/faye');
-    var user_email = $("#user-navigation .wat-cf li").eq(0).html();
 
     client.subscribe("/ideas/*",function(data){
         //eval(data);
@@ -28,7 +27,7 @@ function for_faye(){
         eval(data);
     });
 
-    client.subscribe("/users/" + user_email, function(data){
+    client.subscribe("/users/", function(data){
         eval(data);
     });
 
@@ -42,49 +41,45 @@ function for_faye(){
             switch( message['channel'] ) {
                 case "/ideas/new":
                 feedback = eval("(" + message['data'] + ")");
-                console.log('incoming', user_email + this.update_count);
-                if (feedback.user_email != user_email) {
-                    this.update_count += 1
-                    if (tabsManager.activeTab === "liked") {
-                        var link = "<a href='/ideas' class='notify'>更新了"
-                        + this.update_count + "个点子，点击查看</a>";
-                        $('div.update-notice').html(link);
-                        var str="id"+feedback.user_id;
-                        $('.block .content .inner .left .user_icon span').each(function(idx, el) {
-                            if ($(el).hasClass(str)){
-								var cont = $(el).find('b').first();
-                                var num=cont.text().match(/\d+/);
-                                num=Number(num)+1;
-                                cont.text(cont.text().replace(/(\d+)/,num));
-                            }
-                        })
-                    } else {
-                        flashController.doMessage("<b>有"+this.update_count+"条新点子</b>" );
-                    }
+                console.log('incoming',  this.update_count);
+                this.update_count += 1
+                if (tabsManager.activeTab === "liked") {
+                    var link = "<a href='/ideas' class='notify'>更新了"
+                    + this.update_count + "个点子，点击查看</a>";
+                    $('div.update-notice').html(link);
+                    var str="id"+feedback.user_id;
+                    $('.block .content .inner .left .user_icon span').each(function(idx, el) {
+                        if ($(el).hasClass(str)){
+		    					var cont = $(el).find('b').first();
+                            var num=cont.text().match(/\d+/);
+                            num=Number(num)+1;
+                            cont.text(cont.text().replace(/(\d+)/,num));
+                        }
+                    })
+                } else {
+                    flashController.doMessage("<b>有"+this.update_count+"条新点子</b>" );
                 }
                 break;
 
                 case "/ideas/destroy":
                 feedback = eval("(" + message['data'] + ")");
-                console.log('incoming', user_email + this.destroy_count);
-                if (feedback.user_email != user_email) {
-                    this.destroy_count += 1
-                    if (tabsManager.activeTab === "liked") {
-                        var link = "<a href='/ideas' class='notify'>删除了"
-                        + this.destroy_count + "个点子，点击刷新</a>";
-                        $('div.update-notice').html(link);
-                        var str="id"+feedback.user_id;
-                        $('.block .content .inner .left .user_icon span').each(function(idx, el) {
-                            if ($(el).hasClass(str)){
-								var cont = $(el).find('b').first();
-                                var num=cont.text().match(/\d+/);
-                                num=Number(num)-1;
-                                cont.text(cont.text().replace(/(\d+)/,num));
-                            }
-                        })
-                    } else {
-                        flashController.doMessage("<b>有"+this.destroy_count+"条点子被删除</b>" );
-                    }
+                console.log('incoming', this.destroy_count);
+                this.destroy_count += 1
+                if (tabsManager.activeTab === "liked") {
+                    var link = "<a href='/ideas' class='notify'>删除了"
+                    + this.destroy_count + "个点子，点击刷新</a>";
+                    $('div.update-notice').html(link);
+                    var str="id"+feedback.user_id;
+                    $('.block .content .inner .left .user_icon span').each(function(idx, el) {
+                        if ($(el).hasClass(str)){
+		    					var cont = $(el).find('b').first();
+                            var num=cont.text().match(/\d+/);
+                            num=Number(num)-1;
+                            cont.text(cont.text().replace(/(\d+)/,num));
+                        }
+                    })
+                } else {
+                    flashController.doMessage("<b>有"+this.destroy_count+"条点子被删除</b>" );
                 }
                 break;
 
@@ -99,6 +94,7 @@ function for_faye(){
                     }
                 }
             }
+            console.log('incoming', message);
             callback(message);
         },
         outgoing: function(message, callback) {

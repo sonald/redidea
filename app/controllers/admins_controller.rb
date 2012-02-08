@@ -1,5 +1,4 @@
 class AdminsController < ApplicationController
-  before_filter :authenticate_user!
 	
 	# POST /ranks
 	def admin

@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  before_filter :authenticate_user!
   before_filter :authorized_user, :only => :destroy
   
   # GET /comments
@@ -19,17 +18,15 @@ class CommentsController < ApplicationController
   def create
     @idea = Idea.find(params[:comment][:commentable_id])
     @comment = @idea.comments.create(:comment => params[:comment][:comment])
-    @comment.user = current_user
+    @comment.user = current_user #fixme: move to model
 
     respond_to do |format|
       if @comment.save
         @comments = @idea.comments
         @comment = Comment.new(:commentable_id => @idea.id)
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render json: @comment, status: :created, location: @comment }
         format.js { render "index" }
       else
-        format.html { render action: "new" }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
         format.js { redirect_to ideas_path+"?scope=liked" }
       end
@@ -46,7 +43,6 @@ class CommentsController < ApplicationController
     @comment = Comment.new(:commentable_id => @idea.id)
 
     respond_to do |format|
-      format.html { redirect_to comments_url }
       format.js { render "index" }
     end
   end

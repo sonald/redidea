@@ -18,13 +18,11 @@ class AdvisesController < ApplicationController
 
     respond_to do |format|
       if @advise.save
-        format.html { redirect_to advises_path, notice: 'Advise was successfully created.'}
         format.json { render json: @advise, status: :created, location: @advise }
-        format.js # show.html.erb
+        format.js # create.js.erb
       else
-        format.html { redirect_to advises_path, notice: 'Failed to create advise.'}
         format.json { render json: @advise.errors, status: :unprocessable_entity }
-        format.js # show.html.erb
+        format.js # create.js.erb
       end
     end
   end

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_filter :authenticate_user!
   before_filter :prepare_message
   after_filter :client_info
   protect_from_forgery
