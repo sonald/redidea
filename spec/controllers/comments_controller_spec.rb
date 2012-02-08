@@ -33,13 +33,16 @@ describe CommentsController do
   # update the return value of this method accordingly.
   def valid_attributes
     { :title => 'title',
-      :comment => 'some comments'
+      :comment => 'some comments',
+      :commentable_id => 1
     }
   end
 
   describe "GET index" do
     it "assigns all comments as @comments" do
-      comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id)
+      comment = @user.comments.create! valid_attributes
+      comment.commentable = @idea
+      comment.save
       xhr :get, :index, :idea_id => @idea.id
       assigns(:comments).should eq([comment])
     end
@@ -65,22 +68,26 @@ describe CommentsController do
   end
 
   describe "DELETE destroy" do
+    before(:each) do
+      @comment = @user.comments.create! valid_attributes
+      @comment.commentable = @idea
+      @comment.save
+    end
+    
     it "destroys the requested comment" do
-      comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id)
-      
       expect {
-        xhr :delete, :destroy, :id => comment.id
+        xhr :delete, :destroy, :id => @comment.id
       }.to change(Comment, :count).by(-1)
     end
 
     it "re-render to the comment index" do
-      comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id)
-      xhr :delete, :destroy, :id => comment.id
+      xhr :delete, :destroy, :id => @comment.id
       response.should render_template("index")
     end
     
     it "redirects to the root_path with wrong user" do
-      comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id + 1)
+      @another_user = Factory(:user, :email => Factory.next(:email))
+      comment = @another_user.comments.create! valid_attributes
       xhr :delete, :destroy, :id => comment.id
       response.should redirect_to(root_path)
     end

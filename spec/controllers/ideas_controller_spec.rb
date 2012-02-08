@@ -37,7 +37,7 @@ describe IdeasController do
     }
   end
 
-  describe "GET index" do
+  describe "GET" do
     before(:each) do 
       @idea1 = Factory(:idea, :user => @user)
       @idea2 = Factory(:idea, :user => @user,
@@ -52,14 +52,17 @@ describe IdeasController do
       @user.like!(@another_ideas[3].id, 1)
     end
 
-    it "assigns a new idea as @idea" do
-      get :index
-      assigns(:idea).should be_a_new(Idea)
+    describe "index" do
+      it "assigns a new idea as @idea" do
+        get :index
+        response.should redirect_to(others_ideas_path)
+      end
+
     end
 
-    describe "parameter :scope == mine" do
+    describe "own" do
       before(:each) do 
-        get :index, :scope => "mine"
+        get :own
       end
       
       it "should only show my ideas" do
@@ -67,13 +70,13 @@ describe IdeasController do
       end
       
       it "should provide liked_ideas" do 
-        assigns(:liked_ideas).should eq([])
+        assigns(:idea).should be_a(Idea)
       end
     end
 
-    describe "parameter :scope == liked" do
+    describe "others" do
       before(:each) do 
-        get :index, :scope => "liked"
+        get :others
       end
       
       it "should show unliked ideas" do
@@ -86,40 +89,29 @@ describe IdeasController do
       
       it "should show message when no idea" do 
         @another_ideas.each { |it| it.destroy }
-        get :index, :scope => "liked"
+        get :others
         response.should have_selector("div", :content => '没有新鲜点子啦。')
       end
     end
 
-    describe "parameter :scope == upload" do
+    describe "upload" do
       before(:each) do 
-        get :index, :scope => "upload"
+        get :upload
       end
       
       it "should have empty arrays" do
-        assigns(:ideas).should eq([])
-        assigns(:liked_ideas).should eq([])
+        assigns(:plans).should eq([])
+        assigns(:plan).should be_a(Plan)
       end
     end
 
-    describe "parameter :scope == rule" do
+    describe "rule" do
       before(:each) do 
-        get :index, :scope => "rule"
+        get :rules
       end
       
       it "should only show my ideas" do
-        assigns(:ideas).should eq([])
-        assigns(:liked_ideas).should eq([])
-      end
-    end
-
-    describe "parameter :scope == nil" do
-      before(:each) do 
-        get :index
-      end
-      
-      it "should only show my ideas" do
-        assigns(:scope).should eq('liked')
+        response.should have_selector("h2", :content => '欢迎')
       end
     end
   end
@@ -128,19 +120,14 @@ describe IdeasController do
     describe "with valid params" do
       it "creates a new Idea" do
         expect {
-          post :create, :idea => valid_attributes
+          xhr :post, :create, :idea => valid_attributes
         }.to change(Idea, :count).by(1)
       end
 
       it "assigns a newly created idea as @idea" do
-        post :create, :idea => valid_attributes
+        xhr :post, :create, :idea => valid_attributes
         assigns(:idea).should be_a(Idea)
         assigns(:idea).should be_persisted
-      end
-
-      it "redirects to the created idea" do
-        post :create, :idea => valid_attributes
-        response.should redirect_to(ideas_path + "?scope=mine")
       end
     end
 
@@ -148,15 +135,8 @@ describe IdeasController do
       it "assigns a newly created but unsaved idea as @idea" do
         # Trigger the behavior that occurs when invalid params are submitted
         Idea.any_instance.stub(:save).and_return(false)
-        post :create, :idea => {}
+        xhr :post, :create, :idea => {}
         assigns(:idea).should be_a_new(Idea)
-      end
-
-      it "redirects to the ideas" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Idea.any_instance.stub(:save).and_return(false)
-        post :create, :idea => {}
-        response.should redirect_to(ideas_path + "?scope=mine")
       end
     end
   end
@@ -165,14 +145,8 @@ describe IdeasController do
     it "destroys the requested idea" do
       idea = Factory(:idea, :user => @user)
       expect {
-        delete :destroy, :id => idea.id
+        xhr :delete, :destroy, :id => idea.id
       }.to change(Idea, :count).by(-1)
-    end
-
-    it "redirects to the ideas list" do
-      idea = Factory(:idea, :user => @user)
-      delete :destroy, :id => idea.id
-      response.should redirect_to(ideas_url + "?scope=mine")
     end
   end
 
@@ -185,7 +159,7 @@ describe IdeasController do
     end
 
     it "should deny access" do
-      delete :destroy, :id => @idea1
+      xhr :delete, :destroy, :id => @idea1
       response.should redirect_to(root_url)
     end
   end

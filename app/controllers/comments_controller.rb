@@ -16,14 +16,13 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    @idea = Idea.find(params[:comment][:commentable_id])
-    @comment = @idea.comments.create(:comment => params[:comment][:comment])
-    @comment.user = current_user #fixme: move to model
+    @comment = current_user.comments.new(params[:comment])
 
     respond_to do |format|
       if @comment.save
+        @idea = Idea.find(params[:comment][:commentable_id])
         @comments = @idea.comments
-        @comment = Comment.new(:commentable_id => @idea.id)
+        @comment = Comment.new(:commentable_id => params[:comment][:commentable_id])
         format.json { render json: @comment, status: :created, location: @comment }
         format.js { render "index" }
       else
