@@ -1,0 +1,12 @@
+<%# encoding: utf-8 %>
+
+<%= render 'ideas/form' %>
+
+<div class="inner">
+  <ul id="ideas_box" class="list" style="word-break:break-all;">
+    <!-- unlied ideas -->
+    <% @ideas.each do |idea| %>
+      <%= render :partial => "ideas/my_ideas", :locals => { :idea => idea } %>
+    <% end %>
+  </ul>
+</div>

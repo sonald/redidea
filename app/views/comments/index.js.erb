@@ -1,5 +1,5 @@
 (function() {
-  var $item = $('#myideas li.ideaid<%= @idea.id %> .item');
+  var $item = $('#ideas_box li.ideaid<%= @idea.id %> .item');
   var $link = $item.find('a.comment_link');
   $link.text( $link.text().replace(/\d+/, <%= @comments.length %>) );
 
