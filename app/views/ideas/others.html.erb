@@ -4,7 +4,7 @@
   <div class="block">
     <div class="secondary-navigation">
       <ul class="wat-cf">
-        <li <%= "class='active'" if controller.action_name == 'others'%> >
+        <li class="first <%= 'active' if controller.action_name == 'others'%>" >
         <%= link_to t('liked'), others_ideas_path, :remote => true %>
         </li>
         <li <%= "class='active'" if controller.action_name == 'own'%>>
