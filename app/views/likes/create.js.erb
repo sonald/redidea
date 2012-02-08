@@ -1,7 +1,7 @@
 <%# encoding: utf-8 %>
 
 (function() {
-  $('#main .block .content').html( " <%= j render 'ideas/idea_box' %> " );
+  $('#main .block .content').html( " <%= j render 'ideas/others_box' %> " );
   console.log('rebind commentsManager');
   commentsManager.bindHandlers();
 })();

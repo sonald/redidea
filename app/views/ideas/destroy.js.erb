@@ -7,7 +7,7 @@
 <% end %>
 
 <% if @idea.valid? %>
-    $('#myideas').find('.ideaid<%= @idea.id%> ').fadeOut(1000,function(){
+    $('#ideas_box').find('.ideaid<%= @idea.id%> ').fadeOut(1000,function(){
       $(this).remove();
     } );
 

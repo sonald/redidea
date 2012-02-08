@@ -7,7 +7,15 @@ Redidea::Application.routes.draw do
 
   resources :comments
   root :to => "ideas#index"
-  resources :ideas
+  resources :ideas do
+    collection do
+      get 'others'
+      get 'own'
+      get 'upload'
+      get 'rules'
+    end
+  end
+
   match '/admin', :to => 'admins#admin'
   match '/invite', :to => 'admins#invite'
   match '/likes', :to => 'likes#create'

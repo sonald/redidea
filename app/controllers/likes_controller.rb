@@ -5,10 +5,6 @@ class LikesController < ApplicationController
   # POST /likes 
   def create
     @like = current_user.like!(params[:idea_id], params[:score])
-    @idea = Idea.new
-
-    @scope = 'liked'
-    @scopes = [:liked, :mine, :upload, :rule]
 
     @liked_ideas = current_user.liking
     @ideas = Idea.all - @liked_ideas - current_user.ideas
@@ -16,12 +12,9 @@ class LikesController < ApplicationController
 
     respond_to do |format|
       if @like and @like.save
-        format.html { redirect_to ideas_path+"?scope=liked", :notice => t(:like_created) }
-        format.json { render :json => @like, :status => :created, :location => @like }
         format.js 
       else
-        format.html { redirect_to ideas_path+"?scope=liked", :notice => t(:like_create_fail) }
-        format.json { render :json => @like.errors, :status => :unprocessable_entity }
+        format.html { redirect_to others_ideas_url, :notice => t(:like_create_fail) }
       end
     end
   end
@@ -32,11 +25,11 @@ class LikesController < ApplicationController
         # 检测传入的like是否是自己的idea 
         # 检测传入的like是否已经被创建
         if current_user.ideas.find_by_id(params[:idea_id]) or current_user.liking?(params[:idea_id])
-          redirect_to ideas_path+"?scope=liked"
+          redirect_to others_ideas_path 
         end
 
       else
-        redirect_to ideas_path+"?scope=liked"
+        redirect_to others_ideas_path
       end
     end
 end

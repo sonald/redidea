@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
       else
         format.html { render action: "new" }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
-        format.js { redirect_to ideas_path+"?scope=liked" }
+        format.js { redirect_to others_ideas_url }
       end
     end
   end

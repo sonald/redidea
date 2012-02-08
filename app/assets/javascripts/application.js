@@ -45,7 +45,7 @@ function for_faye(){
                 console.log('incoming', user_email + this.update_count);
                 if (feedback.user_email != user_email) {
                     this.update_count += 1
-                    if (tabsManager.activeTab === "liked") {
+                    if (tabsManager.activeTab === "others") {
                         var link = "<a href='/ideas' class='notify'>更新了"
                         + this.update_count + "个点子，点击查看</a>";
                         $('div.update-notice').html(link);
@@ -69,7 +69,7 @@ function for_faye(){
                 console.log('incoming', user_email + this.destroy_count);
                 if (feedback.user_email != user_email) {
                     this.destroy_count += 1
-                    if (tabsManager.activeTab === "liked") {
+                    if (tabsManager.activeTab === "others") {
                         var link = "<a href='/ideas' class='notify'>删除了"
                         + this.destroy_count + "个点子，点击刷新</a>";
                         $('div.update-notice').html(link);

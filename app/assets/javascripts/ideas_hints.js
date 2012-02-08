@@ -121,7 +121,7 @@ var ideasController = {
 var commentsManager = {
     bindHandlers: function() {
         var that = this;
-        var $items = $('#myideas .item').has('a.comment_link');
+        var $items = $('#ideas_box .item').has('a.comment_link');
         $items.each( function(idx, el) {
             var $link = $(el).find('a.comment_link');
 
@@ -142,6 +142,7 @@ var commentsManager = {
 var tabsManager = {
     activeTab : "", 
     previousTab : "",
+
     switchTab: function(tab) {
         this.previousTab = this.activeTab;
         this.activeTab = tab;
@@ -149,7 +150,7 @@ var tabsManager = {
 
     init: function() {
         var that = this;
-        var scope_pat = new RegExp("scope=(.*)", 'g');
+        var scope_pat = new RegExp("ideas/(.*)", 'g');
         $('.secondary-navigation .wat-cf li').each(function(idx, el) {
             if ($(el).hasClass('active')) {
                 // find current tab in navigation bar, set activeTab to it.
@@ -168,7 +169,7 @@ var tabsManager = {
                 // when the tab is clicked, set the tab to active
                 'click': function(ev) {
                     $this = $(this);
-                    var scope_pat = new RegExp("scope=(.*)", 'g');
+                    var scope_pat = new RegExp("ideas/(.*)", 'g');
                     var ret = scope_pat.exec( $this.attr('href') );
                     that.switchTab( ret[1] );
                     console.log(that.previousTab + "," + that.activeTab + ":focus");
@@ -176,15 +177,25 @@ var tabsManager = {
                 'ajax:success': function() {
                     console.log('ajax.success');
                     // need to reinit to rebind event handlers
-                    if (that.activeTab == 'mine') {
+                    if (that.activeTab == 'own') {
                         ideasController.initialized = false;
                         ideasController.init();
                         console.log('rebind commentsManager');
                         commentsManager.bindHandlers();
-                    } else if (that.activeTab == 'liked') {
+                    } else if (that.activeTab == 'others') {
                         console.log('rebind commentsManager');
                         commentsManager.bindHandlers();
                     }
+
+                    $('.secondary-navigation .wat-cf li').find('a').each( function(idx, el) {
+                        var scope_pat = new RegExp("ideas/(.*)", 'g');
+                        var ret = scope_pat.exec( $(el).attr('href') );
+                        if ( ret[1] == that.activeTab ) {
+                            $(el).parent().addClass('active first');
+                        } else {
+                            $(el).parent().removeClass('active first');
+                        }
+                    } );
                 }
             })
         });
@@ -239,7 +250,7 @@ $(document).ready( function() {
     tabsManager.init();
     tabsManager.bindHandlers();
     ideasController.init();
-    if (tabsManager.activeTab == 'liked' ||tabsManager.activeTab == 'mine') {
+    if (tabsManager.activeTab == 'others' ||tabsManager.activeTab == 'own') {
         commentsManager.bindHandlers();
     }
 

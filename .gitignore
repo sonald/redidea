@@ -16,6 +16,7 @@
 *.log
 .*~
 *~
+.*.swp
 
 # dir for uploading plans
 public/uploads
