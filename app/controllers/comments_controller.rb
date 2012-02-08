@@ -18,7 +18,7 @@ class CommentsController < ApplicationController
   def create
     @idea = Idea.find(params[:comment][:commentable_id])
     @comment = @idea.comments.create(:comment => params[:comment][:comment])
-    @comment.user = current_user
+    @comment.user = current_user #fixme: move to model
 
     respond_to do |format|
       if @comment.save
@@ -45,7 +45,6 @@ class CommentsController < ApplicationController
     @comment = Comment.new(:commentable_id => @idea.id)
 
     respond_to do |format|
-      format.html { redirect_to comments_url }
       format.js { render "index" }
     end
   end

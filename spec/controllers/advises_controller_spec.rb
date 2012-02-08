@@ -20,6 +20,11 @@ require 'spec_helper'
 
 describe AdvisesController do
   render_views
+  before(:each) do 
+    @user = Factory(:user)
+    sign_in @user
+  end
+  
   # This should return the minimal set of attributes required to create a valid
   # Advise. As you add validations to Advise, be sure to
   # update the return value of this method accordingly.

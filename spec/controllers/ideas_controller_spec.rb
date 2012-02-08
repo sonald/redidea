@@ -105,7 +105,7 @@ describe IdeasController do
         it "should show message when no idea" do 
           @another_ideas.each { |it| it.destroy }
           get :index, :scope => "liked"
-          response.should have_selector("p", :content => '没有新鲜点子啦。')
+          response.should have_selector("div", :content => '没有新鲜点子啦。')
         end
       end
 
