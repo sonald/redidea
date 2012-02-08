@@ -1,5 +1,4 @@
 class LikesController < ApplicationController
-  before_filter :authenticate_user!
   before_filter :authorized_user
 
   # POST /likes 

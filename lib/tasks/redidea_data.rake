@@ -1,6 +1,6 @@
 namespace :db do
-  desc "Fill database with sample data"
-  task :populate => :environment do
+  desc "Fill database with sample data for rspec unit test"
+  task :test => :environment do
     Rake::Task['db:reset'].invoke
     make_users
     make_ideas
@@ -37,8 +37,8 @@ end
 def make_ideas
   User.all.each do |user|
     ('1'..'5').each do |i|
-      content = "ssssssssssssssssssssssssssssssssssssssssssssss"
-	  title = user.email+i
+      content = "just some messages"
+	  title = "#{i}. #{user.email}"
       user.ideas.create!(:content => content, :title => title)
     end
   end
@@ -50,5 +50,4 @@ def make_likes
   Idea.all[6..20].each do | idea |
     user.like!(idea.id, 1) 
   end
-  #likers.each { |liker| liker.like!(user) }
 end

@@ -8,6 +8,7 @@ class ServerAuth
         message['error'] = 'Invalid authentication token'
       end
     end
+    message['ext'] = nil
     callback.call(message)
   end
 end

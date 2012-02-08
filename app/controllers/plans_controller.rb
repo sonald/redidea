@@ -1,5 +1,4 @@
 class PlansController < ApplicationController
-  before_filter :authenticate_user!
 
   def index
     redirect_to upload_ideas_url
