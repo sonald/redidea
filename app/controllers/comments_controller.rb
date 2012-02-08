@@ -24,11 +24,9 @@ class CommentsController < ApplicationController
       if @comment.save
         @comments = @idea.comments
         @comment = Comment.new(:commentable_id => @idea.id)
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render json: @comment, status: :created, location: @comment }
         format.js { render "index" }
       else
-        format.html { render action: "new" }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
         format.js { redirect_to ideas_path+"?scope=liked" }
       end

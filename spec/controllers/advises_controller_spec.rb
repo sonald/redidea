@@ -20,6 +20,7 @@ require 'spec_helper'
 
 describe AdvisesController do
   render_views
+  
   before(:each) do 
     @user = Factory(:user)
     sign_in @user
@@ -44,19 +45,14 @@ describe AdvisesController do
     describe "with valid params" do
       it "creates a new Advise" do
         expect {
-          post :create, :advise => valid_attributes
+          xhr :post, :create, :advise => valid_attributes
         }.to change(Advise, :count).by(1)
       end
 
       it "assigns a newly created advise as @advise" do
-        post :create, :advise => valid_attributes
+        xhr :post, :create, :advise => valid_attributes
         assigns(:advise).should be_a(Advise)
         assigns(:advise).should be_persisted
-      end
-
-      it "redirects to the created advise" do
-        post :create, :advise => valid_attributes
-        response.should redirect_to(advises_path)
       end
     end
 
@@ -64,15 +60,8 @@ describe AdvisesController do
       it "assigns a newly created but unsaved advise as @advise" do
         # Trigger the behavior that occurs when invalid params are submitted
         Advise.any_instance.stub(:save).and_return(false)
-        post :create, :advise => {}
+        xhr :post, :create, :advise => {}
         assigns(:advise).should be_a_new(Advise)
-      end
-
-      it "re-renders the 'new' template" do
-        # Trigger the behavior that occurs when invalid params are submitted
-        Advise.any_instance.stub(:save).and_return(false)
-        post :create, :advise => {}
-        response.should redirect_to(advises_path)
       end
     end
   end

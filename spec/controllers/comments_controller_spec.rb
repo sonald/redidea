@@ -39,8 +39,8 @@ describe CommentsController do
 
   describe "GET index" do
     it "assigns all comments as @comments" do
-      comment = @idea.comments.create! valid_attributes
-      get :index, :idea_id => @idea.id
+      comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id)
+      xhr :get, :index, :idea_id => @idea.id
       assigns(:comments).should eq([comment])
     end
   end
@@ -53,12 +53,12 @@ describe CommentsController do
     describe "with valid params" do
       it "creates a new Comment" do
         expect {
-          post :create, :comment => @comment_arg
+          xhr :post, :create, :comment => @comment_arg
         }.to change(Comment, :count).by(1)
       end
 
       it "assigns a newly created comment as @comment" do
-        post :create, :comment => @comment_arg
+        xhr :post, :create, :comment => @comment_arg
         assigns(:comment).should be_a(Comment)
       end
     end
@@ -69,7 +69,7 @@ describe CommentsController do
       comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id)
       
       expect {
-        delete :destroy, :id => comment.id
+        xhr :delete, :destroy, :id => comment.id
       }.to change(Comment, :count).by(-1)
     end
 
@@ -81,7 +81,7 @@ describe CommentsController do
     
     it "redirects to the root_path with wrong user" do
       comment = @idea.comments.create! valid_attributes.merge(:user_id => @user.id + 1)
-      delete :destroy, :id => comment.id
+      xhr :delete, :destroy, :id => comment.id
       response.should redirect_to(root_path)
     end
   end
