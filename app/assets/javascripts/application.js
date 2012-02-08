@@ -99,6 +99,7 @@ function for_faye(){
                     }
                 }
             }
+            console.log('incoming', message);
             callback(message);
         },
         outgoing: function(message, callback) {
