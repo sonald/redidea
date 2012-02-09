@@ -15,14 +15,14 @@
 <div class='item'>
   <b class="title"><%= idea.title %></b>
   <p><%= idea.content %></p>
-  <div class='right small'>
-    <%= link_to '牛', likes_path(:idea_id => idea.id, :score => 3), :class => 'small-button', :remote => true %>
-    <%= link_to '还不错', likes_path(:idea_id => idea.id, :score => 2), :class => 'small-button', :remote => true %>
-    <%= link_to '没感觉', likes_path(:idea_id => idea.id, :score => 1), :class => 'small-button', :remote => true %>
-    <%= link_to '不喜欢', likes_path(:idea_id => idea.id, :score => 0), :class => 'small-button', :remote => true %>
-  </div>
   <div class='small'>
-    <%= time_ago_in_words(idea.created_at) %>前
+		<%= time_ago_in_words(idea.created_at) %>前
+		<div class="right">
+    	<%= link_to '牛', likes_path(:idea_id => idea.id, :score => 3), :class => 'small-button', :remote => true %>
+    	<%= link_to '还不错', likes_path(:idea_id => idea.id, :score => 2), :class => 'small-button', :remote => true %>
+   		<%= link_to '没感觉', likes_path(:idea_id => idea.id, :score => 1), :class => 'small-button', :remote => true %>
+    	<%= link_to '不喜欢', likes_path(:idea_id => idea.id, :score => 0), :class => 'small-button', :remote => true %>
+  	</div>
   </div>
 </div>
 </li>
