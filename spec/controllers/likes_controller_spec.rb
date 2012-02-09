@@ -35,19 +35,14 @@ describe LikesController do
           get :create, :idea_id => @idea2.id, :score => 1
         }.to change(Like, :count).by(0)
       end
-
-      it "redirects to the liked page" do
-        get :create, :idea_id => @idea2.id, :score => 1
-        response.should redirect_to(ideas_path + "?scope=liked")
-      end
     end
 
     describe "with invalid params" do
-      it "redirects to the liked page" do
+      it "redirects to the others ideas page" do
         # Trigger the behavior that occurs when invalid params are submitted
         Like.any_instance.stub(:save).and_return(false)
         post :create, :like => {}
-        response.should redirect_to(ideas_path + "?scope=liked")
+        response.should redirect_to(others_ideas_path)
       end
     end
   end

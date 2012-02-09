@@ -22,7 +22,7 @@ describe "Ideas" do
       # end
       
       it "should have a signout link" do
-        get ideas_path
+        get others_ideas_path
         response.should have_selector("a", :href => destroy_user_session_path,
                                       :content => "退出")
       end
